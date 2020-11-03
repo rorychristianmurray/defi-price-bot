@@ -64,11 +64,11 @@ setInterval(async () => {
 
   console.log(t)
   
-  T.post('statuses/update', { status: "test1" }, function(err, data, response) {
+  T.post('statuses/update', { status: t }, function(err, data, response) {
     console.log(data)
   })
 
-}, 1000 * 60 * 1)
+}, 1000 * 60 * 60 * 2)
 
 const express = require('express');
 const server = express()
