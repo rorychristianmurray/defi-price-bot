@@ -64,9 +64,8 @@ setInterval(async () => {
 
   console.log(t)
   
-  const interval = 1000 * 60 * 60
   T.post('statuses/update', { status: t }, function(err, data, response) {
     console.log(data)
   })
 
-}, interval)
+}, 1000 * 60 * 30)
