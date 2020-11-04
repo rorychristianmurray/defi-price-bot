@@ -50,7 +50,6 @@ setInterval(async () => {
   const chfusd = await chfPriceFeed.methods.latestRoundData().call()
   const xauusd = await xauPriceFeed.methods.latestRoundData().call()
   const ftse = await ftsePriceFeed.methods.latestRoundData().call()
-
   const nky = await nkyPriceFeed.methods.latestRoundData().call()
 
   const btcprice = numeral(btcusd.answer / 100000000).format('0,0.00')
@@ -64,7 +63,7 @@ setInterval(async () => {
   const ftseprice = numeral(ftse.answer / 100000000).format('0,0.00')
   const nkyprice = numeral(nky.answer / 100000000).format('0,0.00')
 
-  const t = `BTCUSD : ${btcprice}\nETHUSD : ${ethprice}\nETHUSD : ${ethprice}\nLINKUSD : ${linkprice}\nGBPUSD : ${gbpprice}\nJPYUSD : ${jpyprice}\nCHFUSD : ${chfprice}\nXAU : ${xauprice}\nFTSE (GBP) : ${ftseprice}\nNKY (JPY) : ${nkyprice}\n\nprices brought to you by the decentralized web`
+  const t = `BTCUSD : ${btcprice}\nETHUSD : ${ethprice}\nLINKUSD : ${linkprice}\nEURUSD : ${eurprice}\nGBPUSD : ${gbpprice}\nJPYUSD : ${jpyprice}\nCHFUSD : ${chfprice}\nXAU : ${xauprice}\nFTSE (GBP) : ${ftseprice}\nNKY (JPY) : ${nkyprice}\n\nprices brought to you by the decentralized web`
 
   console.log(t)
   
@@ -72,7 +71,7 @@ setInterval(async () => {
     console.log(data)
   })
 
-}, 1000 * 60 * 60)
+}, 1000 * 60 * 60 * 4)
 
 const express = require('express');
 const server = express()
