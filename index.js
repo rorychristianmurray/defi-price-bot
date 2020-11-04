@@ -68,7 +68,7 @@ setInterval(async () => {
     console.log(data)
   })
 
-}, 1000 * 60 * 60)
+}, 1000 * 60 * 30)
 
 const express = require('express');
 const server = express()
