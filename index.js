@@ -26,6 +26,46 @@ const T = new Twit({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET
 })
 
+// MENTIONS
+const stream = T.stream('statuses/filter', { track: '@defipricebot' })
+
+stream.on('tweet', function(tweet) {
+  console.log("tweet: ", tweet)
+  let txt
+
+  if (tweet.truncated) {
+    if (tweet.extended_tweet.display_text_range) {
+      txt = tweet.extended_tweet.full_text.slice(tweet.extended_tweet.display_text_range[0])
+    } else {
+      txt = tweet.extended_tweet.full_text
+    }
+  } else {
+    if (tweet.display_text_range) {
+      // splice new str only with display text
+      txt = tweet.text.slice(tweet.display_text_range[0])
+    } else {
+      txt = tweet.text
+    }
+  }
+
+  // regex for match of @defipricebot in the text
+  const re = /\bdefipricebot\b/
+
+  let t = `Thanks for the mention @${tweet.user.screen_name}! Follow me for the latest round pricing data of major assets via the decentralized web. #poweredbychainlink`
+
+  console.log("txt : ", txt)
+
+  if (re.exec(txt)) {
+    // do not reply to self
+    if (tweet.user.screen_name !== 'defipricebot') {
+      T.post('statuses/update', { status: t, in_reply_to_status_id: tweet.id_str }, function (err, data, response) {
+        console.log(data)
+      })
+    }
+  }
+
+})
+
 // PRICE FEEDS
 const btcPriceFeed = new web3.eth.Contract(ABI, BTC_ADDR)
 const ethPriceFeed = new web3.eth.Contract(ABI, ETH_ADDR)
