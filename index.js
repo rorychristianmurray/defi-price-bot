@@ -124,12 +124,14 @@ setInterval(async () => {
   });
 }, 1000 * 60 * 60 * 4);
 
-// const express = require('express');
-// const server = express()
+const express = require("express");
+const server = express();
 
-// server.get('/', (req, res) => {
-//   res.status(200).json({server: "server running"});
-// });
+server.get("/", (req, res) => {
+  res.status(200).json({ server: "server running" });
+});
 
-// const port = process.env.PORT || 5001;
-// server.listen(port, () => console.log(`\n*** server running on port ${port}***\n`));
+const port = process.env.PORT || 5001;
+server.listen(port, () =>
+  console.log(`\n*** server running on port ${port}***\n`)
+);
