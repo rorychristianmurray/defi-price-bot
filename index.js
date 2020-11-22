@@ -73,7 +73,7 @@ stream.on("tweet", async function (tweet) {
     const btcusd = await btcPriceFeed.methods.latestRoundData().call();
     const btcprice = numeral(btcusd.answer / 100000000).format("0,0.00");
 
-    const t = `The latest round pricing data for BTCUSD is ${btcprice}\n\n#poweredbychainlink`;
+    const t = `Thanks for asking @${tweet.user.screen_name}!\n\nThe latest round pricing data for BTCUSD is $${btcprice}\n\n#poweredbychainlink`;
 
     console.log("tweet.id_str : ", tweet.id_str);
 
@@ -89,13 +89,13 @@ stream.on("tweet", async function (tweet) {
     if (re.exec(txt)) {
       // do not reply to self
       if (tweet.user.screen_name !== "defipricebot") {
-        // T.post(
-        //   "statuses/update",
-        //   { status: t, in_reply_to_status_id: tweet.id_str },
-        //   function (err, data, response) {
-        //     console.log(data);
-        //   }
-        // );
+        T.post(
+          "statuses/update",
+          { status: t, in_reply_to_status_id: tweet.id_str },
+          function (err, data, response) {
+            console.log(data);
+          }
+        );
       }
     }
   }
