@@ -16,9 +16,19 @@ const {
   LINK_ADDR,
 } = require("./constants/addresses");
 
-const web3 = new Web3(
-  "https://mainnet.infura.io/v3/7ba1a9b1c3d44e739244cd96a174c445"
-);
+const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.INFURA_ID}`);
+
+// PRICE FEEDS
+const btcPriceFeed = new web3.eth.Contract(ABI, BTC_ADDR);
+const ethPriceFeed = new web3.eth.Contract(ABI, ETH_ADDR);
+const linkPriceFeed = new web3.eth.Contract(ABI, LINK_ADDR);
+const eurPriceFeed = new web3.eth.Contract(ABI, EUR_ADDR);
+const gbpPriceFeed = new web3.eth.Contract(ABI, GBP_ADDR);
+const jpyPriceFeed = new web3.eth.Contract(ABI, JPY_ADDR);
+const chfPriceFeed = new web3.eth.Contract(ABI, CHF_ADDR);
+const xauPriceFeed = new web3.eth.Contract(ABI, XAU_ADDR);
+const ftsePriceFeed = new web3.eth.Contract(ABI, FTSE_ADDR);
+const nkyPriceFeed = new web3.eth.Contract(ABI, NKY_ADDR);
 
 const T = new Twit({
   consumer_key: process.env.CONSUMER_KEY,
@@ -28,12 +38,6 @@ const T = new Twit({
 });
 
 // PRICE ALERTS
-
-// tweet every time bitcoin moves $1000
-
-// get initial bitcoin price
-// divide by mod 1000
-// store as starting price
 
 // MENTIONS
 // filter the twitter stream by tweets containing "@defipricebot"
@@ -61,23 +65,76 @@ stream.on("tweet", async function (tweet) {
     }
   }
 
-  // regex for match of @defipricebot in the text
-  const re = /\bdefipricebot\b/;
+  // slice string
+  // if first 24 chars are "here @defipricebot where is"
+  // then check if last chars are a supported asset
+  // otherwise reply assets not supported or possibly check spelling
+  // current assets supported are
 
-  let t = `Thanks for the mention @${tweet.user.screen_name}! Follow me for the latest round pricing data of major assets via the decentralized web. #poweredbychainlink`;
+  const priceCheckStr = txt.slice(0, 26);
 
-  let qtext = txt.toLo;
+  if (priceCheckStr.toLowerCase() === "hey @defipricebot where is") {
+    let asset;
+    let assetPrice;
+    let err = false;
+    if (txt.length === 33) {
+      // get last six chars
+      asset = txt.slice(-6);
+    } else if (txt.length === 34) {
+      // get last seven chars
+      asset = txt.slice(-6);
+    } else {
+      err = true;
+    }
 
-  if (txt.toLowerCase() === "hey @defipricebot where we at?") {
-    console.log("in if");
+    // get price of asset
+    if (asset.toUpperCase() === "BTCUSD") {
+      const btcusd = await btcPriceFeed.methods.latestRoundData().call();
+      assetPrice = numeral(btcusd.answer / 100000000).format("0,0.00");
+    } else if (asset.toUpperCase === "ETHUSD") {
+      const ethusd = await ethPriceFeed.methods.latestRoundData().call();
+      assetPrice = numeral(ethusd.answer / 100000000).format("0,0.00");
+    } else if (asset.toUpperCase === "LINKUSD") {
+      const linkusd = await linkPriceFeed.methods.latestRoundData().call();
+      assetPrice = numeral(linkusd.answer / 100000000).format("0,0.00");
+    } else if (asset.toUpperCase === "EURUSD") {
+      const eurusd = await eurPriceFeed.methods.latestRoundData().call();
+      assetPrice = numeral(eurusd.answer / 100000000).format("0,0.0000");
+    } else if (asset.toUpperCase === "GBPUSD") {
+      const gbpusd = await gbpPriceFeed.methods.latestRoundData().call();
+      assetPrice = numeral(gbpusd.answer / 100000000).format("0,0.0000");
+    } else if (asset.toUpperCase === "JPYUSD") {
+      const jpyusd = await jpyPriceFeed.methods.latestRoundData().call();
+      assetPrice = numeral(1 / (jpyusd.answer / 100000000)).format("0,0.00");
+    } else if (asset.toUpperCase === "CHFUSD") {
+      const chfusd = await chfPriceFeed.methods.latestRoundData().call();
+      assetPrice = numeral(chfusd.answer / 100000000).format("0,0.0000");
+    } else if (asset.toUpperCase === "GOLD") {
+      const xauusd = await xauPriceFeed.methods.latestRoundData().call();
+      assetPrice = numeral(xauusd.answer / 10000000).format("0,0.00");
+    } else {
+      err = true;
+      const t = `Thanks for asking @${tweet.user.screen_name}!\n\nUnfortunately I can't parse that. Current assets supported are BTCUSD, ETHUSD, LINKUSD, EURUSD, GBPUSD, JPYUSD, CHFUSD, and gold.\n\nSee documentation in my bio for more info or DM @therorymurray for further help.`;
+    }
 
+    if (!err) {
+      const formatAsset =
+        asset.toLowerCase() === "gold" ? "gold" : asset.toUpperCase();
+      const t = `Thanks for asking @${tweet.user.screen_name}!\n\nThe latest round pricing data for ${formatAsset} is ${assetprice}\n\n#poweredbychainlink`;
+      T.post(
+        "statuses/update",
+        { status: t, in_reply_to_status_id: tweet.id_str },
+        function (err, data, response) {
+          console.log(data);
+        }
+      );
+    }
+  } else if (txt.toLowerCase() === "hey @defipricebot where we at?") {
     // return latest bitcoin price
     const btcusd = await btcPriceFeed.methods.latestRoundData().call();
     const btcprice = numeral(btcusd.answer / 100000000).format("0,0.00");
 
     const t = `Thanks for asking @${tweet.user.screen_name}!\n\nThe latest round pricing data for BTCUSD is $${btcprice}\n\n#poweredbychainlink`;
-
-    console.log("tweet.id_str : ", tweet.id_str);
 
     T.post(
       "statuses/update",
@@ -87,7 +144,11 @@ stream.on("tweet", async function (tweet) {
       }
     );
   } else {
-    console.log("in else");
+    // regex for match of @defipricebot in the text
+    const re = /\bdefipricebot\b/;
+
+    let t = `Thanks for the mention @${tweet.user.screen_name}! Follow me for the latest round pricing data of major assets via the decentralized web. #poweredbychainlink`;
+
     if (re.exec(txt)) {
       // do not reply to self
       if (tweet.user.screen_name !== "defipricebot") {
@@ -102,18 +163,6 @@ stream.on("tweet", async function (tweet) {
     }
   }
 });
-
-// PRICE FEEDS
-const btcPriceFeed = new web3.eth.Contract(ABI, BTC_ADDR);
-const ethPriceFeed = new web3.eth.Contract(ABI, ETH_ADDR);
-const linkPriceFeed = new web3.eth.Contract(ABI, LINK_ADDR);
-const eurPriceFeed = new web3.eth.Contract(ABI, EUR_ADDR);
-const gbpPriceFeed = new web3.eth.Contract(ABI, GBP_ADDR);
-const jpyPriceFeed = new web3.eth.Contract(ABI, JPY_ADDR);
-const chfPriceFeed = new web3.eth.Contract(ABI, CHF_ADDR);
-const xauPriceFeed = new web3.eth.Contract(ABI, XAU_ADDR);
-const ftsePriceFeed = new web3.eth.Contract(ABI, FTSE_ADDR);
-const nkyPriceFeed = new web3.eth.Contract(ABI, NKY_ADDR);
 
 setInterval(async () => {
   const btcusd = await btcPriceFeed.methods.latestRoundData().call();
@@ -138,7 +187,7 @@ setInterval(async () => {
   const ftseprice = numeral(ftse.answer / 100000000).format("0,0.00");
   const nkyprice = numeral(nky.answer / 100000000).format("0,0.00");
 
-  const t = `BTCUSD : ${btcprice}\nETHUSD : ${ethprice}\nLINKUSD : ${linkprice}\nEURUSD : ${eurprice}\nGBPUSD : ${gbpprice}\nJPYUSD : ${jpyprice}\nCHFUSD : ${chfprice}\nXAU : ${xauprice}\nFTSE (GBP) : ${ftseprice}\nNKY (JPY) : ${nkyprice}\n\nprices brought to you by the decentralized web`;
+  const t = `BTCUSD : ${btcprice}\nETHUSD : ${ethprice}\nLINKUSD : ${linkprice}\nEURUSD : ${eurprice}\nGBPUSD : ${gbpprice}\nJPYUSD : ${jpyprice}\nCHFUSD : ${chfprice}\nXAU : ${xauprice}\nFTSE (GBP) : ${ftseprice}\nNKY (JPY) : ${nkyprice}\n\nPrices brought to you by the decentralized web`;
 
   console.log(t);
 
