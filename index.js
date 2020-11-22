@@ -121,7 +121,7 @@ stream.on("tweet", async function (tweet) {
       const formatAsset =
         asset.toLowerCase() === "gold" ? "gold" : asset.toUpperCase();
 
-      const t = `Thanks for asking @${tweet.user.screen_name}!\n\nThe latest round pricing data for ${formatAsset} is ${assetprice}\n\n#poweredbychainlink`;
+      const t = `Thanks for asking @${tweet.user.screen_name}!\n\nThe latest round pricing data for ${formatAsset} is ${assetPrice}\n\n#poweredbychainlink`;
 
       T.post(
         "statuses/update",
