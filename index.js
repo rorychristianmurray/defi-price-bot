@@ -66,7 +66,9 @@ stream.on("tweet", async function (tweet) {
 
   let t = `Thanks for the mention @${tweet.user.screen_name}! Follow me for the latest round pricing data of major assets via the decentralized web. #poweredbychainlink`;
 
-  if (txt === "hey @defipricebot where we at?") {
+  let qtext = txt.toLo;
+
+  if (txt.toLowerCase() === "hey @defipricebot where we at?") {
     console.log("in if");
 
     // return latest bitcoin price
