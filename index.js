@@ -112,10 +112,15 @@ stream.on("tweet", async function (tweet) {
     } else {
       err = true;
       const t = `Thanks for asking @${tweet.user.screen_name}!\n\nUnfortunately I can't parse that. Current assets supported are BTCUSD, ETHUSD, LINKUSD, EURUSD, GBPUSD, JPYUSD, CHFUSD, and gold.\n\nSee documentation in my bio for more info or DM @therorymurray for further help.`;
-    }
 
-    console.log("asset : ", asset);
-    console.log("err : ", err);
+      T.post(
+        "statuses/update",
+        { status: t, in_reply_to_status_id: tweet.id_str },
+        function (err, data, response) {
+          console.log(data);
+        }
+      );
+    }
 
     if (err === false) {
       const formatAsset =
