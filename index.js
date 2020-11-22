@@ -39,6 +39,7 @@ const T = new Twit({
 
 // TODO
 // PRICE ALERTS
+// Fix retweet/mention collision
 
 // MENTIONS
 // filter the twitter stream by tweets containing "@defipricebot"

@@ -8,7 +8,7 @@ It is also queryable for on-demand price data of certain major assets. See below
 
 ### Use
 
-In order to get price data on-demand, tweet in the below format, where ASSET is one the supported assets.
+In order to get price data on-demand, tweet in the below format, where ASSET is one of the supported assets.
 
 `Hey @defipricebot where is ASSET?`
 
