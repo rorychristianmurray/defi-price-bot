@@ -16,9 +16,7 @@ const {
   LINK_ADDR,
 } = require("./constants/addresses");
 
-const web3 = new Web3(
-  "https://mainnet.infura.io/v3/7ba1a9b1c3d44e739244cd96a174c445"
-);
+const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.INFURA_ID}`);
 
 const T = new Twit({
   consumer_key: process.env.CONSUMER_KEY,
