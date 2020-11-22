@@ -29,7 +29,7 @@ I may occasionally add other queryable functionality not listed here. Please ref
 
 ### Contributions
 
-This is an open source project and I encourage anyone to basically go hog wild with it.
+This is an open source project and I encourage anyone to copy, fork, and/or generally go hog wild with it.
 
 If you would like to contribute to this repo specifically, please reach out!
 

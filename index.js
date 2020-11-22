@@ -66,12 +66,6 @@ stream.on("tweet", async function (tweet) {
     }
   }
 
-  // slice string
-  // if first 24 chars are "here @defipricebot where is"
-  // then check if last chars are a supported asset
-  // otherwise reply assets not supported or possibly check spelling
-  // current assets supported are
-
   const priceCheckStr = txt.slice(0, 26);
 
   if (priceCheckStr.toLowerCase() === "hey @defipricebot where is") {
@@ -87,6 +81,8 @@ stream.on("tweet", async function (tweet) {
     } else {
       err = true;
     }
+
+    console.log("asset : ", asset);
 
     // get price of asset
     if (asset.toUpperCase() === "BTCUSD") {
@@ -118,7 +114,7 @@ stream.on("tweet", async function (tweet) {
       const t = `Thanks for asking @${tweet.user.screen_name}!\n\nUnfortunately I can't parse that. Current assets supported are BTCUSD, ETHUSD, LINKUSD, EURUSD, GBPUSD, JPYUSD, CHFUSD, and gold.\n\nSee documentation in my bio for more info or DM @therorymurray for further help.`;
     }
 
-    if (!err) {
+    if (err === false) {
       const formatAsset =
         asset.toLowerCase() === "gold" ? "gold" : asset.toUpperCase();
 
