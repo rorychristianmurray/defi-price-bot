@@ -82,31 +82,29 @@ stream.on("tweet", async function (tweet) {
       err = true;
     }
 
-    console.log("asset : ", asset);
-
     // get price of asset
     if (asset.toUpperCase() === "BTCUSD") {
       const btcusd = await btcPriceFeed.methods.latestRoundData().call();
       assetPrice = numeral(btcusd.answer / 100000000).format("0,0.00");
-    } else if (asset.toUpperCase === "ETHUSD") {
+    } else if (asset.toUpperCase() === "ETHUSD") {
       const ethusd = await ethPriceFeed.methods.latestRoundData().call();
       assetPrice = numeral(ethusd.answer / 100000000).format("0,0.00");
-    } else if (asset.toUpperCase === "LINKUSD") {
+    } else if (asset.toUpperCase() === "LINKUSD") {
       const linkusd = await linkPriceFeed.methods.latestRoundData().call();
       assetPrice = numeral(linkusd.answer / 100000000).format("0,0.00");
-    } else if (asset.toUpperCase === "EURUSD") {
+    } else if (asset.toUpperCase() === "EURUSD") {
       const eurusd = await eurPriceFeed.methods.latestRoundData().call();
       assetPrice = numeral(eurusd.answer / 100000000).format("0,0.0000");
-    } else if (asset.toUpperCase === "GBPUSD") {
+    } else if (asset.toUpperCase() === "GBPUSD") {
       const gbpusd = await gbpPriceFeed.methods.latestRoundData().call();
       assetPrice = numeral(gbpusd.answer / 100000000).format("0,0.0000");
-    } else if (asset.toUpperCase === "JPYUSD") {
+    } else if (asset.toUpperCase() === "JPYUSD") {
       const jpyusd = await jpyPriceFeed.methods.latestRoundData().call();
       assetPrice = numeral(1 / (jpyusd.answer / 100000000)).format("0,0.00");
-    } else if (asset.toUpperCase === "CHFUSD") {
+    } else if (asset.toUpperCase() === "CHFUSD") {
       const chfusd = await chfPriceFeed.methods.latestRoundData().call();
       assetPrice = numeral(chfusd.answer / 100000000).format("0,0.0000");
-    } else if (asset.toUpperCase === "GOLD") {
+    } else if (asset.toUpperCase() === "GOLD") {
       const xauusd = await xauPriceFeed.methods.latestRoundData().call();
       assetPrice = numeral(xauusd.answer / 10000000).format("0,0.00");
     } else {
