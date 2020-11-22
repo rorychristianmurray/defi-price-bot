@@ -109,7 +109,7 @@ stream.on("tweet", async function (tweet) {
       assetPrice = numeral(chfusd.answer / 100000000).format("0,0.0000");
     } else if (asset.toUpperCase() === "GOLD") {
       const xauusd = await xauPriceFeed.methods.latestRoundData().call();
-      assetPrice = numeral(xauusd.answer / 10000000).format("0,0.00");
+      assetPrice = numeral(xauusd.answer / 100000000).format("0,0.00");
     } else {
       err = true;
       const t = `Thanks for asking @${tweet.user.screen_name}!\n\nUnfortunately I can't parse that. Current assets supported are BTCUSD, ETHUSD, LINKUSD, EURUSD, GBPUSD, JPYUSD, CHFUSD, and gold.\n\nSee documentation in my bio for more info or DM @therorymurray for further help.`;
@@ -191,7 +191,7 @@ setInterval(async () => {
   const gbpprice = numeral(gbpusd.answer / 100000000).format("0,0.0000");
   const jpyprice = numeral(1 / (jpyusd.answer / 100000000)).format("0,0.00");
   const chfprice = numeral(chfusd.answer / 100000000).format("0,0.0000");
-  const xauprice = numeral(xauusd.answer / 10000000).format("0,0.00");
+  const xauprice = numeral(xauusd.answer / 100000000).format("0,0.00");
   const ftseprice = numeral(ftse.answer / 100000000).format("0,0.00");
   const nkyprice = numeral(nky.answer / 100000000).format("0,0.00");
 
