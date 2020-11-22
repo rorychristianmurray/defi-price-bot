@@ -112,6 +112,9 @@ stream.on("tweet", async function (tweet) {
       const t = `Thanks for asking @${tweet.user.screen_name}!\n\nUnfortunately I can't parse that. Current assets supported are BTCUSD, ETHUSD, LINKUSD, EURUSD, GBPUSD, JPYUSD, CHFUSD, and gold.\n\nSee documentation in my bio for more info or DM @therorymurray for further help.`;
     }
 
+    console.log("asset : ", asset);
+    console.log("err : ", err);
+
     if (err === false) {
       const formatAsset =
         asset.toLowerCase() === "gold" ? "gold" : asset.toUpperCase();
