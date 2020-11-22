@@ -37,6 +37,7 @@ const T = new Twit({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 });
 
+// TODO
 // PRICE ALERTS
 
 // MENTIONS
@@ -77,12 +78,12 @@ stream.on("tweet", async function (tweet) {
     let asset;
     let assetPrice;
     let err = false;
-    if (txt.length === 33) {
-      // get last six chars
-      asset = txt.slice(-6);
+    if (txt.length === 32) {
+      asset = txt.slice(-5, -1);
     } else if (txt.length === 34) {
-      // get last seven chars
-      asset = txt.slice(-6);
+      asset = txt.slice(-7, -1);
+    } else if (txt.length === 35) {
+      asset = txt.slice(-8, -1);
     } else {
       err = true;
     }
@@ -120,7 +121,9 @@ stream.on("tweet", async function (tweet) {
     if (!err) {
       const formatAsset =
         asset.toLowerCase() === "gold" ? "gold" : asset.toUpperCase();
+
       const t = `Thanks for asking @${tweet.user.screen_name}!\n\nThe latest round pricing data for ${formatAsset} is ${assetprice}\n\n#poweredbychainlink`;
+
       T.post(
         "statuses/update",
         { status: t, in_reply_to_status_id: tweet.id_str },
@@ -147,11 +150,11 @@ stream.on("tweet", async function (tweet) {
     // regex for match of @defipricebot in the text
     const re = /\bdefipricebot\b/;
 
-    let t = `Thanks for the mention @${tweet.user.screen_name}! Follow me for the latest round pricing data of major assets via the decentralized web. #poweredbychainlink`;
-
     if (re.exec(txt)) {
       // do not reply to self
       if (tweet.user.screen_name !== "defipricebot") {
+        let t = `Thanks for the mention @${tweet.user.screen_name}! Follow me for the latest round pricing data of major assets via the decentralized web. #poweredbychainlink`;
+
         T.post(
           "statuses/update",
           { status: t, in_reply_to_status_id: tweet.id_str },
@@ -194,7 +197,7 @@ setInterval(async () => {
   T.post("statuses/update", { status: t }, function (err, data, response) {
     console.log(data);
   });
-}, 1000 * 60 * 60 * 4);
+}, 1000 * 60 * 60 * 8);
 
 const express = require("express");
 const server = express();
